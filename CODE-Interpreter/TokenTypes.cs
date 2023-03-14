@@ -36,10 +36,13 @@ namespace CODE_Interpreter
         BOOL_VAR,
 
         //Reserved Words
-        BEGIN, END, CODE,
         SCAN, DISPLAY,
         IF, ELSE, WHILE, 
         INT, BOOL, FLOAT, CHAR,
         TRUE, FALSE,
+
+        // start and end 
+        BEGIN_CODE, // BEGIN CODE
+        END_CODE //END CODE
     }
 }

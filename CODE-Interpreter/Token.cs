@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,27 +12,33 @@ namespace CODE_Interpreter
     /// Class for token
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    internal class Token <T>
+    internal class Token
     {
-        private TokenTypes _type;
-        private string _lexeme;
-        private T _literal;
-        private int _line;
+        // Temporary, e string si literal
+        private readonly TokenTypes _type;
+        private readonly string _lexeme;
+        private readonly string _literal;
+        private readonly int _line;
 
-        public Token(TokenTypes type, string lexeme, T literal, int line)
+        public Token(TokenTypes type, string lexeme, string literal, int line)
         {
-            type = _type;
-            lexeme = _lexeme;
-            literal = _literal;
-            line = _line;
+            _type = type;
+            _lexeme = lexeme;
+            _literal = literal;
+            _line = line;
         }
 
-        public TokenTypes Type { get; }
+        public TokenTypes Type { get => _type; }
 
-        public string Lexeme { get; }
+        public string Lexeme { get => _lexeme; }
 
-        public T Literal { get; }
+        public string Literal { get => _literal; }
 
-        public int Line { get; }
+        public int Line { get => _line; }
+
+        public override string ToString()
+        {
+            return $"{_type}\n{_lexeme}\n{_literal}\n{_line}\n";
+        }
     }
 }
