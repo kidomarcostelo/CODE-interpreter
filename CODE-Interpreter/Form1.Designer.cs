@@ -30,16 +30,46 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.fastColoredTextBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).BeginInit();
+            this.terminal = new System.Windows.Forms.RichTextBox();
+            this.textBox1 = new FastColoredTextBoxNS.FastColoredTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.textBox1)).BeginInit();
             this.SuspendLayout();
             // 
-            // fastColoredTextBox1
+            // button1
             // 
-            this.fastColoredTextBox1.AutoCompleteBracketsList = new char[] {
+            this.button1.Location = new System.Drawing.Point(578, 336);
+            this.button1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(91, 34);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Run";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(39, 387);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(47, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Terminal";
+            // 
+            // terminal
+            // 
+            this.terminal.Location = new System.Drawing.Point(41, 410);
+            this.terminal.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this.terminal.Name = "terminal";
+            this.terminal.Size = new System.Drawing.Size(628, 137);
+            this.terminal.TabIndex = 7;
+            this.terminal.Text = "";
+            // 
+            // textBox1
+            // 
+            this.textBox1.AutoCompleteBracketsList = new char[] {
         '(',
         ')',
         '{',
@@ -50,76 +80,51 @@
         '\"',
         '\'',
         '\''};
-            this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(35, 22);
-            this.fastColoredTextBox1.BackBrush = null;
-            this.fastColoredTextBox1.CharHeight = 22;
-            this.fastColoredTextBox1.CharWidth = 12;
-            this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.fastColoredTextBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
-            this.fastColoredTextBox1.IsReplaceMode = false;
-            this.fastColoredTextBox1.Location = new System.Drawing.Point(62, 42);
-            this.fastColoredTextBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.fastColoredTextBox1.Name = "fastColoredTextBox1";
-            this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
-            this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fastColoredTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fastColoredTextBox1.ServiceColors")));
-            this.fastColoredTextBox1.Size = new System.Drawing.Size(940, 482);
-            this.fastColoredTextBox1.TabIndex = 0;
-            this.fastColoredTextBox1.Zoom = 100;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(467, 541);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(137, 52);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Run";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(58, 596);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(69, 20);
-            this.label3.TabIndex = 6;
-            this.label3.Text = "Terminal";
-            // 
-            // richTextBox3
-            // 
-            this.richTextBox3.Location = new System.Drawing.Point(62, 630);
-            this.richTextBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(940, 208);
-            this.richTextBox3.TabIndex = 7;
-            this.richTextBox3.Text = "";
+            this.textBox1.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
+            this.textBox1.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+            this.textBox1.BackBrush = null;
+            this.textBox1.CharHeight = 14;
+            this.textBox1.CharWidth = 8;
+            this.textBox1.CurrentPenSize = 3;
+            this.textBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.textBox1.DocumentPath = null;
+            this.textBox1.Font = new System.Drawing.Font("Courier New", 9.75F);
+            this.textBox1.IsReplaceMode = false;
+            this.textBox1.Location = new System.Drawing.Point(42, 44);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Paddings = new System.Windows.Forms.Padding(0);
+            this.textBox1.SelectionChangedDelayedEnabled = false;
+            this.textBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.textBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("textBox1.ServiceColors")));
+            this.textBox1.Size = new System.Drawing.Size(627, 286);
+            this.textBox1.TabIndex = 8;
+            this.textBox1.Zoom = 100;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1080, 879);
-            this.Controls.Add(this.richTextBox3);
+            this.ClientSize = new System.Drawing.Size(720, 574);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.terminal);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.fastColoredTextBox1);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.fastColoredTextBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.textBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private FastColoredTextBoxNS.FastColoredTextBox fastColoredTextBox1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.RichTextBox richTextBox3;
+        private System.Windows.Forms.RichTextBox terminal;
+        private FastColoredTextBoxNS.FastColoredTextBox textBox1;
     }
 }
 
