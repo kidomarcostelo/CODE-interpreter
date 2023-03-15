@@ -22,28 +22,36 @@ namespace CODE_Interpreter
 
         /// <summary>
         /// Di pa sure unsay return value
-        /// for now bool
+        /// Returns pila ka errors, 0 if no errors
         /// </summary>
         public int Parse()
         {
-            if (_tokens.Count == 0)
+            /*if (_tokens.Count == 0)
             {
-                return 0;
-            }
+                _errorMessages.Add("Code must start with \"BEGIN CODE\"");
+                _errorMessages.Add("Code must end with \"END CODE\"");
+                //return _errorMessages.Count();
+
+            }*/
 
             // not efficient?
-            if (_tokens.First().Type != TokenTypes.BEGIN_CODE)
-            {
-                _errorMessages.Add("Code must begin with START CODE");
-            }
+            // di ko sure if ari mag butang ug error message, or sa interpreter
+            // feel nako ang parser kay purely parse, so no matter unsa na dira dili siya dapat mo care kung unsa iyahang gi parse
+            // kay ang interpreter class ra mo verify sa unsa iyaha gi parse?
 
-            if (_tokens.Last().Type != TokenTypes.END_CODE)
+            // ay joke parser man diay ni so siya diay mo verify sa mga tokens
+            // ang interpreter class kay siya ra mag compile tanan, mura adto ang pipeline
+            if (_tokens.FirstOrDefault() == null)
             {
-
-                _errorMessages.Add("Code must end with END CODE");
+                // basin inig print sa error mas nice if ma display ang line
+                _errorMessages.Add("TMP error->Code must start with \"BEGIN CODE\"");
+                _errorMessages.Add("TMP error->Code must end with \"END CODE\"");
             }
 
             // ari ang loop
+                //
+            //
+
             return _errorMessages.Count();
         }
 

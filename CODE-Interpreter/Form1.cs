@@ -19,7 +19,7 @@ namespace CODE_Interpreter
         {
             _interpreter = new Interpreter(textBox1.Text);
 
-            bool isSuccessful = _interpreter.Interpret();
+             bool isSuccessful = _interpreter.Interpret();
 
             if (isSuccessful)
             {
