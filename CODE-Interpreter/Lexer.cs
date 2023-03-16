@@ -55,7 +55,12 @@ namespace CODE_Interpreter
             {
                 // use lineNumber for marking a line 
 
-
+                if (_lines[lineNumber] == "#")
+                {
+                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
+                    continue;
+                }
+                
                 if (_lines[lineNumber] == "BEGIN CODE")
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
