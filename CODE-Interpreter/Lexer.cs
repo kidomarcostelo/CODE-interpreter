@@ -16,7 +16,12 @@ namespace CODE_Interpreter
     {
         private readonly List<Token> _tokens;
         private readonly string[] _lines;
-        private string[] errorMessage;
+        private List<string> errorMessage;
+        private static int lineNum;
+        private readonly string[] code;
+        private string currString;
+        private int currStringLength;
+        private int charCtr;
 
         public List<Token> Tokens { get { return _tokens; } set { Tokens = _tokens; } }
         
@@ -28,7 +33,149 @@ namespace CODE_Interpreter
         {
             _tokens = new List<Token>();
             _lines = SplitByLine(code);
+            lineNum = 0;
         }
+
+        public int Analyze()
+        {
+            int i = 0;
+            while (i < code.Length)
+            {
+                AnalyzeLine();
+                lineNum++;
+                i++;
+                charCtr = 0;
+            }
+            return errorMessage.Count != 0 ? 1 : 0;
+        }
+
+        private void AnalyzeLine()
+        {
+            int tokenCtr = 0;
+            currString = code[lineNum];
+            currStringLength = currString.Length;
+
+            while (charCtr < currStringLength)
+            {
+                char x = currString[charCtr];
+                switch (x)
+                {
+                    case '=':
+                        if (getNextChar() == '=')
+                        {
+                            string temp = "" + x + getNextChar();
+                            _tokens.Add(new Token(TokenTypes.EQUAL, "==", null, lineNum));
+                            charCtr += 2;
+                        }
+                        else
+                        {
+                            _tokens.Add(new Token(TokenTypes.EQUALS, x.ToString(), null, lineNum));
+                            charCtr++;
+                        }
+                        break;
+                    case ',':
+                        _tokens.Add(new Token(TokenTypes.COMMA, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case ':':
+                        _tokens.Add(new Token(TokenTypes.COLON, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '"':
+                        _tokens.Add(new Token(TokenTypes.DOUBLE_QUOTE, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case ' ':
+                        charCtr++;
+                        break;
+                    case '+':
+                        _tokens.Add(new Token(TokenTypes.ADD, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '-':
+                        _tokens.Add(new Token(TokenTypes.SUBT, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '/':
+                        _tokens.Add(new Token(TokenTypes.DIV, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '*':
+                        tokenCtr = _tokens.Count;
+                        if (charCtr == 0 || _tokens[tokenCtr - 1].Line != lineNum)
+                        {
+                            while (charCtr != currStringLength) { charCtr++; }
+                        }
+                        else
+                        {
+                            _tokens.Add(new Token(TokenTypes.MULT, x.ToString(), null, lineNum));
+                            charCtr++;
+                        }
+                        break;
+                    case '(':
+                        _tokens.Add(new Token(TokenTypes.LEFT_PAREN, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case ')':
+                        _tokens.Add(new Token(TokenTypes.RIGHT_PAREN, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '>':
+                        if (getNextChar() == '=')
+                        {
+                            string temp = "" + x + getNextChar();
+                            _tokens.Add(new Token(TokenTypes.GREATER_EQUAL, temp, null, lineNum));
+                            charCtr += 2;
+                        }
+                        else
+                        {
+                            _tokens.Add(new Token(TokenTypes.GREATER, x.ToString(), null, lineNum));
+                            charCtr++;
+                        }
+                        break;
+                    case '<':
+                        if (getNextChar() == '=')
+                        {
+                            string temp = "" + x + getNextChar();
+                            _tokens.Add(new Token(TokenTypes.LESSER_EQUAL, temp, null, lineNum));
+                            charCtr += 2;
+                        }
+                        else if (getNextChar() == '>')
+                        {
+                            _tokens.Add(new Token(TokenTypes.NOT_EQUAL, "<>", null, lineNum));
+                            charCtr += 2;
+                        }
+                        else
+                        {
+                            _tokens.Add(new Token(TokenTypes.LESSER, x.ToString(), null, lineNum));
+                            charCtr++;
+                        }
+                        break;
+                    case '%':
+                        _tokens.Add(new Token(TokenTypes.MOD, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '&':
+                        _tokens.Add(new Token(TokenTypes.AMPERSAND, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '#':
+                        _tokens.Add(new Token(TokenTypes.SHARP, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case '[':
+                        _tokens.Add(new Token(TokenTypes.LEFT_BRACE, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                    case ']':
+                        _tokens.Add(new Token(TokenTypes.RIGHT_BRACE, x.ToString(), null, lineNum));
+                        charCtr++;
+                        break;
+                        //default here
+                }
+            }
+        }
+
 
         /// <summary>
         /// Reads the entire code and separate them per line
@@ -96,6 +243,92 @@ namespace CODE_Interpreter
                 }
             }
             return _tokens;
+        }
+
+        //Skips the reserved words at the same time mucheck if identifier/variable name sya
+        private void isIdentifier(char x)
+        {
+            string temp = "";
+            while (isAlpha(x) || isDigit(x))
+            {
+                temp += x;
+                x = getNextChar();
+                charCtr++;
+            }
+            switch (temp)
+            {
+                case "BEGIN CODE":
+                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, temp, null, lineNum));
+                    break;
+                case "END CODE":
+                    _tokens.Add(new Token(TokenTypes.END_CODE, temp, null, lineNum));
+                    break;
+                case "CHAR":
+                    _tokens.Add(new Token(TokenTypes.CHAR, temp, null, lineNum));
+                    //error condtn here
+                    break;
+                case "INT":
+                    _tokens.Add(new Token(TokenTypes.INT, temp, null, lineNum));
+                    //error condtn here
+                    break;
+                case "FLOAT":
+                    _tokens.Add(new Token(TokenTypes.FLOAT, temp, null, lineNum));
+                    //error condtn here
+                    break;
+                case "BOOL":
+                    _tokens.Add(new Token(TokenTypes.BOOL, temp, null, lineNum));
+                    break;
+                case "SCAN":
+                    _tokens.Add(new Token(TokenTypes.SCAN, temp, null, lineNum));
+                    break;
+                case "DISPLAY":
+                    _tokens.Add(new Token(TokenTypes.DISPLAY, temp, null, lineNum));
+                    break;
+                case "IF":
+                    _tokens.Add(new Token(TokenTypes.IF, temp, null, lineNum));
+                    break;
+                case "WHILE":
+                    _tokens.Add(new Token(TokenTypes.WHILE, temp, null, lineNum));
+                    break;
+                case "ELSE":
+                    _tokens.Add(new Token(TokenTypes.ELSE, temp, null, lineNum));
+                    break;
+                case "AND":
+                    _tokens.Add(new Token(TokenTypes.AND, temp, null, lineNum));
+                    break;
+                case "OR":
+                    _tokens.Add(new Token(TokenTypes.OR, temp, null, lineNum));
+                    break;
+                case "NOT":
+                    _tokens.Add(new Token(TokenTypes.NOT, temp, null, lineNum));
+                    break;
+                case "TRUE":
+                    temp = "True";
+                    _tokens.Add(new Token(TokenTypes.BOOL_VAR, temp, null, lineNum));
+                    break;
+                case "FALSE":
+                    temp = "False";
+                    _tokens.Add(new Token(TokenTypes.BOOL_VAR, temp, null, lineNum));
+                    break;
+                default: //IDENTIFIER PART
+                    _tokens.Add(new Token(TokenTypes.IDENTIFIER, temp, null, lineNum));
+                    break;
+            }
+        }
+
+        private bool isAlpha(char x)
+        {
+            return ((x == '_') || (x >= 'a' && x <= 'z') || (x >= 'A' && x <= 'Z'));
+        }
+
+        private bool isDigit(char x)
+        {
+            return x >= '0' && x <= '9';
+        }
+
+        public char getNextChar()
+        {
+            return charCtr + 1 < currStringLength ? currString[charCtr + 1] : '|';
         }
     }
 }
