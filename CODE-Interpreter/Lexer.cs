@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -207,7 +208,49 @@ namespace CODE_Interpreter
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
                     continue;
                 }
-                
+
+                // -- DATATYPES -- 
+                if (_lines[lineNumber] == "INT")
+                {
+                    _tokens.Add(new Token(TokenTypes.INT, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.INT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                    }
+                    continue;
+                }
+
+                if (_lines[lineNumber] == "CHAR")
+                {
+                    _tokens.Add(new Token(TokenTypes.CHAR, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.CHAR_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                    }
+                    continue;
+                }
+
+                if (_lines[lineNumber] == "BOOL")
+                {
+                    _tokens.Add(new Token(TokenTypes.BOOL, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.BOOL_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                    }
+                    continue;
+                }
+
+                if (_lines[lineNumber] == "FLOAT")
+                {
+                    _tokens.Add(new Token(TokenTypes.FLOAT, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.FLOAT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                    }
+                    continue;
+                }
+                // -- DATATYPES -- END
+
                 if (_lines[lineNumber] == "BEGIN CODE")
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
@@ -243,6 +286,11 @@ namespace CODE_Interpreter
                 }
             }
             return _tokens;
+        }
+
+        private bool isReservedWord(string word)
+        {
+            return true;
         }
 
         //Skips the reserved words at the same time mucheck if identifier/variable name sya
