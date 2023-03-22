@@ -288,9 +288,50 @@ namespace CODE_Interpreter
             return _tokens;
         }
 
+        /// <summary>
+        /// Checks if a given string is a reserved word.
+        /// </summary>
+        /// <param name="word">The string to check whether it is a reserved word or not.</param>
+        /// <returns>Returns true if the given string is a reserved word.</returns>
         private bool isReservedWord(string word)
         {
-            return true;
+            switch (word)
+            {
+                case "BEGIN CODE":
+                    return true;
+                case "END CODE":
+                    return true;
+                case "CHAR":
+                    return true;
+                case "INT":
+                    return true;
+                case "FLOAT":
+                    return true;
+                case "BOOL":
+                    return true;
+                case "SCAN":
+                    return true;
+                case "DISPLAY":
+                    return true;
+                case "IF":
+                    return true;
+                case "WHILE":
+                    return true;
+                case "ELSE":
+                    return true;
+                case "AND":
+                    return true;
+                case "OR":
+                    return true;
+                case "NOT":
+                    return true;
+                case "TRUE":
+                    return true;
+                case "FALSE":
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         //Skips the reserved words at the same time mucheck if identifier/variable name sya
