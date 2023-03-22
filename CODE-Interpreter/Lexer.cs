@@ -216,6 +216,7 @@ namespace CODE_Interpreter
                     if (!(isReservedWord(_lines[lineNumber + 1])))
                     {
                         _tokens.Add(new Token(TokenTypes.INT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;
                     }
                     continue;
                 }
@@ -226,6 +227,7 @@ namespace CODE_Interpreter
                     if (!(isReservedWord(_lines[lineNumber + 1])))
                     {
                         _tokens.Add(new Token(TokenTypes.CHAR_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;
                     }
                     continue;
                 }
@@ -236,6 +238,7 @@ namespace CODE_Interpreter
                     if (!(isReservedWord(_lines[lineNumber + 1])))
                     {
                         _tokens.Add(new Token(TokenTypes.BOOL_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;   
                     }
                     continue;
                 }
@@ -246,6 +249,7 @@ namespace CODE_Interpreter
                     if (!(isReservedWord(_lines[lineNumber + 1])))
                     {
                         _tokens.Add(new Token(TokenTypes.FLOAT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;
                     }
                     continue;
                 }
