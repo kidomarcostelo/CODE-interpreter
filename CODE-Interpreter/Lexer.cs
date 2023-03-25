@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -207,7 +208,53 @@ namespace CODE_Interpreter
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
                     continue;
                 }
-                
+
+                // -- DATATYPES -- 
+                if (_lines[lineNumber] == "INT")
+                {
+                    _tokens.Add(new Token(TokenTypes.INT, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.INT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;
+                    }
+                    continue;
+                }
+
+                if (_lines[lineNumber] == "CHAR")
+                {
+                    _tokens.Add(new Token(TokenTypes.CHAR, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.CHAR_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;
+                    }
+                    continue;
+                }
+
+                if (_lines[lineNumber] == "BOOL")
+                {
+                    _tokens.Add(new Token(TokenTypes.BOOL, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.BOOL_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;   
+                    }
+                    continue;
+                }
+
+                if (_lines[lineNumber] == "FLOAT")
+                {
+                    _tokens.Add(new Token(TokenTypes.FLOAT, _lines[lineNumber], null, lineNumber + 1));
+                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    {
+                        _tokens.Add(new Token(TokenTypes.FLOAT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        lineNumber++;
+                    }
+                    continue;
+                }
+                // -- DATATYPES -- END
+
                 if (_lines[lineNumber] == "BEGIN CODE")
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
@@ -243,6 +290,52 @@ namespace CODE_Interpreter
                 }
             }
             return _tokens;
+        }
+
+        /// <summary>
+        /// Checks if a given string is a reserved word.
+        /// </summary>
+        /// <param name="word">The string to check whether it is a reserved word or not.</param>
+        /// <returns>Returns true if the given string is a reserved word.</returns>
+        private bool isReservedWord(string word)
+        {
+            switch (word)
+            {
+                case "BEGIN CODE":
+                    return true;
+                case "END CODE":
+                    return true;
+                case "CHAR":
+                    return true;
+                case "INT":
+                    return true;
+                case "FLOAT":
+                    return true;
+                case "BOOL":
+                    return true;
+                case "SCAN":
+                    return true;
+                case "DISPLAY":
+                    return true;
+                case "IF":
+                    return true;
+                case "WHILE":
+                    return true;
+                case "ELSE":
+                    return true;
+                case "AND":
+                    return true;
+                case "OR":
+                    return true;
+                case "NOT":
+                    return true;
+                case "TRUE":
+                    return true;
+                case "FALSE":
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         //Skips the reserved words at the same time mucheck if identifier/variable name sya
