@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace CODE_Interpreter
 {
+    /// <summary>
+    /// Analyzes lists of tokens
+    /// </summary>
     internal class Parser
     {
         private List<string> _errorMessages;
@@ -26,28 +29,27 @@ namespace CODE_Interpreter
         /// </summary>
         public int Parse()
         {
-            /*if (_tokens.Count == 0)
+            // empty code
+            if (_tokens.Count == 0)
             {
                 _errorMessages.Add("Code must start with \"BEGIN CODE\"");
                 _errorMessages.Add("Code must end with \"END CODE\"");
-                //return _errorMessages.Count();
+                return _errorMessages.Count();
 
-            }*/
+            }
 
-            // not efficient?
-            // di ko sure if ari mag butang ug error message, or sa interpreter
-            // feel nako ang parser kay purely parse, so no matter unsa na dira dili siya dapat mo care kung unsa iyahang gi parse
-            // kay ang interpreter class ra mo verify sa unsa iyaha gi parse?
-
-            // ay joke parser man diay ni so siya diay mo verify sa mga tokens
-            // ang interpreter class kay siya ra mag compile tanan, mura adto ang pipeline
-            if (_tokens.FirstOrDefault() == null)
+            // does not begin with BEGIN CODE
+            if (_tokens.First().Type != TokenTypes.BEGIN_CODE)
             {
                 // basin inig print sa error mas nice if ma display ang line
                 _errorMessages.Add("TMP error->Code must start with \"BEGIN CODE\"");
-                _errorMessages.Add("TMP error->Code must end with \"END CODE\"");
             }
 
+            // does not end with END CODE
+            if (_tokens.Last().Type != TokenTypes.END_CODE)
+            {
+                _errorMessages.Add("TMP error->Code must start with \"END CODE\"");
+            }
             // ari ang loop
                 //
             //

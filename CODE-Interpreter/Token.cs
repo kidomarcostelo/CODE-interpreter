@@ -38,7 +38,7 @@ namespace CODE_Interpreter
 
         public override string ToString()
         {
-            return $"{_type}\n{_lexeme}\n{_literal}\n{_line}\n";
+            return $"Token Type: {_type}\n Lexeme: {_lexeme}\n Literal: {_literal}\n Line: {_line}\n";
         }
     }
 }
