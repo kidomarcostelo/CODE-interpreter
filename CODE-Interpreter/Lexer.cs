@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CODE_Interpreter
 {
     /// <summary>
-    /// Tokenize the code into strings of tokens??
-    /// ari kay simply make codes into tokens
+    /// Breaking the input strings into tokesn
     /// </summary>
     internal class Lexer
     {
@@ -197,23 +197,23 @@ namespace CODE_Interpreter
         public List<Token> Tokenize()
         {
             string[] words;
+
             // temporary pani siya 
             for (int lineNumber = 0; lineNumber < _lines.Length; lineNumber++)
             {
                 // use lineNumber for marking a line 
-
                 if (_lines[lineNumber] == "#")
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
                     continue;
                 }
                 
-                if (_lines[lineNumber] == "BEGIN CODE")
+                if (_lines[lineNumber].TrimEnd() == "BEGIN CODE")
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
                     continue;
                 }
-                else if (_lines[lineNumber] == "END CODE")
+                else if (_lines[lineNumber].TrimEnd() == "END CODE")
                 {
                     _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
                     continue;
