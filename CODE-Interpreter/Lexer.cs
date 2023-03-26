@@ -246,45 +246,45 @@ namespace CODE_Interpreter
                     }
                 }
                 // -- DATATYPES -- 
-                if (_lines[lineNumber] == "INT")
+                if (words.ElementAt(0) == "INT")
                 {
-                    _tokens.Add(new Token(TokenTypes.INT, _lines[lineNumber], null, lineNumber + 1));
-                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    _tokens.Add(new Token(TokenTypes.INT, words.ElementAt(0), null, lineNumber + 1));
+                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
-                        _tokens.Add(new Token(TokenTypes.INT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        _tokens.Add(new Token(TokenTypes.INT_VAR, words.ElementAt(1), null, lineNumber + 1));
                         lineNumber++;
                     }
                     continue;
                 }
 
-                if (_lines[lineNumber] == "CHAR")
+                if (words.ElementAt(0) == "CHAR")
                 {
-                    _tokens.Add(new Token(TokenTypes.CHAR, _lines[lineNumber], null, lineNumber + 1));
-                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    _tokens.Add(new Token(TokenTypes.CHAR, words.ElementAt(0), null, lineNumber + 1));
+                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
-                        _tokens.Add(new Token(TokenTypes.CHAR_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        _tokens.Add(new Token(TokenTypes.CHAR_VAR, words.ElementAt(1), null, lineNumber + 1));
                         lineNumber++;
                     }
                     continue;
                 }
 
-                if (_lines[lineNumber] == "BOOL")
+                if (words.ElementAt(0) == "BOOL")
                 {
-                    _tokens.Add(new Token(TokenTypes.BOOL, _lines[lineNumber], null, lineNumber + 1));
-                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    _tokens.Add(new Token(TokenTypes.BOOL, words.ElementAt(0), null, lineNumber + 1));
+                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
-                        _tokens.Add(new Token(TokenTypes.BOOL_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
-                        lineNumber++;   
+                        _tokens.Add(new Token(TokenTypes.BOOL_VAR, words.ElementAt(1), null, lineNumber + 1));
+                        lineNumber++;
                     }
                     continue;
                 }
 
-                if (_lines[lineNumber] == "FLOAT")
+                if (words.ElementAt(0) == "FLOAT")
                 {
-                    _tokens.Add(new Token(TokenTypes.FLOAT, _lines[lineNumber], null, lineNumber + 1));
-                    if (!(isReservedWord(_lines[lineNumber + 1])))
+                    _tokens.Add(new Token(TokenTypes.FLOAT, words.ElementAt(0), null, lineNumber + 1));
+                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
-                        _tokens.Add(new Token(TokenTypes.FLOAT_VAR, _lines[lineNumber + 1], null, lineNumber + 1));
+                        _tokens.Add(new Token(TokenTypes.FLOAT_VAR, words.ElementAt(1), null, lineNumber + 1));
                         lineNumber++;
                     }
                     continue;
@@ -295,49 +295,72 @@ namespace CODE_Interpreter
         }
 
         /// <summary>
-        /// Checks if a given string is a reserved word.
+        /// Checks if a given variable name iwas tokenized.
         /// </summary>
-        /// <param name="word">The string to check whether it is a reserved word or not.</param>
-        /// <returns>Returns true if the given string is a reserved word.</returns>
-        private bool isReservedWord(string word)
+        /// <param name="tokens">List of tokens to be checked.</param>
+        /// <param name="temp">Variable name to be checked.</param>
+        /// <returns>Returns true if a string is already tokenized as a variable.</returns>
+        private bool VarNameAlreadyExists(List<Token> tokens, String temp)
         {
+            foreach (Token token in tokens)
+            {
+                if (token.Lexeme == temp)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Checks if a given string is a valid variable name.
+        /// </summary>
+        /// <param name="word">The string to check whether it is valid variable name or not.</param>
+        /// <returns>Returns true if the given string is valid variable name.</returns>
+        private bool IsValidVarName(string word)
+        {
+            if (isDigit(word.First()))
+            {
+                return false;
+            }
+
             switch (word)
             {
                 case "BEGIN CODE":
-                    return true;
+                    return false;
                 case "END CODE":
-                    return true;
+                    return false;
                 case "CHAR":
-                    return true;
+                    return false;
                 case "INT":
-                    return true;
+                    return false;
                 case "FLOAT":
-                    return true;
+                    return false;
                 case "BOOL":
-                    return true;
+                    return false;
                 case "SCAN":
-                    return true;
+                    return false;
                 case "DISPLAY":
-                    return true;
+                    return false;
                 case "IF":
-                    return true;
+                    return false;
                 case "WHILE":
-                    return true;
+                    return false;
                 case "ELSE":
-                    return true;
+                    return false;
                 case "AND":
-                    return true;
+                    return false;
                 case "OR":
-                    return true;
+                    return false;
                 case "NOT":
-                    return true;
+                    return false;
                 case "TRUE":
-                    return true;
+                    return false;
                 case "FALSE":
-                    return true;
-                default:
                     return false;
             }
+
+            return true;
         }
 
         //Skips the reserved words at the same time mucheck if identifier/variable name sya
