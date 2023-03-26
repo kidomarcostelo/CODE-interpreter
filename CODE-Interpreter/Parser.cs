@@ -51,11 +51,50 @@ namespace CODE_Interpreter
                 _errorMessages.Add("TMP error->Code must start with \"END CODE\"");
             }
             // ari ang loop
-                //
             //
+            //
+            for (int i = 0; i < _tokens.Count; i++)
+            {
+                var current = _tokens[i];
+                var previous = i > 0 ? _tokens[i - 1] : null;
+                var next = i < _tokens.Count - 1 ? _tokens[i + 1] : null;
+
+                if (previous != null)
+                {
+                    if ((previous.Lexeme == "BEGIN CODE" && IsDataType(current) && IsVariableName(next)) || ((IsVariableName(previous)) && IsDataType(current) && IsVariableName(next)))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        _errorMessages.Add("TMP error -> at line (" + current.Line + ") -> Variable declaration must be found after the \"BEGIN CODE\"");
+                    }
+                }
+            }
 
             return _errorMessages.Count();
         }
 
+        /// <summary>
+        /// Checks if an input token is of type datatype.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <returns>Returns true if token is of type datatype.</returns>
+        private bool IsDataType(Token token)
+        {
+            return token.Type == TokenTypes.INT || token.Type == TokenTypes.BOOL ||
+                token.Type == TokenTypes.FLOAT || token.Type == TokenTypes.CHAR;
+        }
+
+        /// <summary>
+        /// Checks if an input token is of type variable.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <returns>>Returns true if token is of type variable.</returns>
+        private bool IsVariableName(Token token)
+        {
+            return token.Type == TokenTypes.INT_VAR || token.Type == TokenTypes.BOOL_VAR ||
+                token.Type == TokenTypes.FLOAT_VAR || token.Type == TokenTypes.CHAR_VAR || token.Type == TokenTypes.IDENTIFIER;
+        }
     }
 }
