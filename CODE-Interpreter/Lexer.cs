@@ -5,13 +5,13 @@ using System.ComponentModel;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CODE_Interpreter
 {
     /// <summary>
-    /// Tokenize the code into strings of tokens??
-    /// ari kay simply make codes into tokens
+    /// Breaking the input strings into tokesn
     /// </summary>
     internal class Lexer
     {
@@ -198,17 +198,53 @@ namespace CODE_Interpreter
         public List<Token> Tokenize()
         {
             string[] words;
+
             // temporary pani siya 
             for (int lineNumber = 0; lineNumber < _lines.Length; lineNumber++)
             {
                 // use lineNumber for marking a line 
-
                 if (_lines[lineNumber] == "#")
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
                     continue;
                 }
+                
+                // if line ==  BEGIN CODE
+                if (_lines[lineNumber].TrimEnd() == "BEGIN CODE")
+                {
+                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
+                    continue;
+                }
+                
+                // if lines == END CODE
+                else if (_lines[lineNumber].TrimEnd() == "END CODE")
+                {
+                    _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
+                    continue;
+                }
 
+                words = _lines[lineNumber].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < words.Length; i++)
+                {
+                    switch (words[i])
+                    {
+                        //case "BEGIN":
+                        //    // ERROR if BEGIN lang ang naa sa sentences
+                        //    if (words[i + 1] == "CODE")
+                        //    {
+                        //        _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, line + 1));
+                        //        _tokenCount++;
+                        //    }
+                        //    break;
+                        //case "END":
+                        //    if (words[i + 1] == "CODE")
+                        //    {
+                        //        _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, line + 1));
+                        //        _tokenCount++;
+                        //    }
+                        //    break;
+                    }
+                }
                 // -- DATATYPES -- 
                 if (_lines[lineNumber] == "INT")
                 {
@@ -254,40 +290,6 @@ namespace CODE_Interpreter
                     continue;
                 }
                 // -- DATATYPES -- END
-
-                if (_lines[lineNumber] == "BEGIN CODE")
-                {
-                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
-                    continue;
-                }
-                else if (_lines[lineNumber] == "END CODE")
-                {
-                    _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
-                    continue;
-                }
-
-                words = _lines[lineNumber].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < words.Length; i++)
-                {
-                    switch (words[i])
-                    {
-                        //case "BEGIN":
-                        //    // ERROR if BEGIN lang ang naa sa sentences
-                        //    if (words[i + 1] == "CODE")
-                        //    {
-                        //        _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, line + 1));
-                        //        _tokenCount++;
-                        //    }
-                        //    break;
-                        //case "END":
-                        //    if (words[i + 1] == "CODE")
-                        //    {
-                        //        _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, line + 1));
-                        //        _tokenCount++;
-                        //    }
-                        //    break;
-                    }
-                }
             }
             return _tokens;
         }

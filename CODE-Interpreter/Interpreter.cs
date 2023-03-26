@@ -15,8 +15,8 @@ namespace CODE_Interpreter
         private string _code;
         private Lexer _lexer;
         private Parser _parser;
-
         private  List<string> _errorMessages;
+
         public Interpreter(string code)
         { 
             _code = code;
@@ -28,9 +28,14 @@ namespace CODE_Interpreter
         public bool Interpret()
         {
             int error;
-            _parser = new Parser(_lexer.Tokenize());
-            error =  _parser.Parse();
+            List<Token> Tokens = _lexer.Tokenize();
 
+            _parser = new Parser(Tokens);
+            error = _parser.Parse();
+
+            // ------------
+            Console.WriteLine("{\n" + String.Join("\n", Tokens) + "}"); 
+            // ------------
             if (error == 0)
             {
                 return true;
