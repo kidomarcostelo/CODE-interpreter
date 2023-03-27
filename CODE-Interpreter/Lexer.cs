@@ -252,7 +252,6 @@ namespace CODE_Interpreter
                     if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
                         _tokens.Add(new Token(TokenTypes.INT_VAR, words.ElementAt(1), null, lineNumber + 1));
-                        lineNumber++;
                     }
                     continue;
                 }
@@ -263,7 +262,6 @@ namespace CODE_Interpreter
                     if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
                         _tokens.Add(new Token(TokenTypes.CHAR_VAR, words.ElementAt(1), null, lineNumber + 1));
-                        lineNumber++;
                     }
                     continue;
                 }
@@ -274,7 +272,6 @@ namespace CODE_Interpreter
                     if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
                         _tokens.Add(new Token(TokenTypes.BOOL_VAR, words.ElementAt(1), null, lineNumber + 1));
-                        lineNumber++;
                     }
                     continue;
                 }
@@ -285,7 +282,6 @@ namespace CODE_Interpreter
                     if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
                     {
                         _tokens.Add(new Token(TokenTypes.FLOAT_VAR, words.ElementAt(1), null, lineNumber + 1));
-                        lineNumber++;
                     }
                     continue;
                 }
