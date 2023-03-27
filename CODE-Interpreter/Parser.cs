@@ -67,7 +67,10 @@ namespace CODE_Interpreter
                     }
                     else
                     {
-                        _errorMessages.Add("TMP error -> at line (" + current.Line + ") -> Variable declaration must be found after the \"BEGIN CODE\"");
+                        if ((IsDataType(current) || IsVariableName(current)))
+                        {
+                            _errorMessages.Add("TMP error -> at line (" + current.Line + ") -> Variable declaration must be found after the \"BEGIN CODE\"");
+                        }
                     }
                 }
             }
