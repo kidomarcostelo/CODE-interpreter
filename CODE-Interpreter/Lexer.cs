@@ -219,20 +219,36 @@ namespace CODE_Interpreter
                 }*/
 
                 // if line ==  BEGIN CODE
-                if (_lines[lineNumber].TrimEnd().StartsWith("BEGIN CODE") || _lines[lineNumber].TrimEnd().Length > "BEGIN CODE".Length && _lines[lineNumber].TrimEnd()[_lines[lineNumber].TrimEnd().Length - 1] == '#')
+                if (_lines[lineNumber].TrimEnd().StartsWith("BEGIN CODE"))
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
                     continue;
                 }
-                
+
+                else if (_lines[lineNumber].TrimEnd().Contains("BEGIN CODE") &&
+                        _lines[lineNumber].TrimEnd().IndexOf('#', _lines[lineNumber].IndexOf("BEGIN CODE") + "BEGIN CODE".Length) >= 0)
+                {
+                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, "COMMENT", null, lineNumber + 1));
+                    continue;
+                }
+
                 // if lines == END CODE
-                else if (_lines[lineNumber].TrimEnd().StartsWith("END CODE") || _lines[lineNumber].TrimEnd().Length > "END CODE".Length && _lines[lineNumber].TrimEnd()[_lines[lineNumber].TrimEnd().Length - 1] == '#')
+                else if (_lines[lineNumber].TrimEnd().StartsWith("END CODE"))
                 {
                     _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
                     continue;
                 }
 
-                words = _lines[lineNumber].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                else if (_lines[lineNumber].TrimEnd().Contains("END CODE") &&
+                        _lines[lineNumber].TrimEnd().IndexOf('#', _lines[lineNumber].IndexOf("END CODE") + "END CODE".Length) >= 0)
+                {
+                    _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, "COMMENT", null, lineNumber + 1));
+                    continue;
+                }
+
+                    words = _lines[lineNumber].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 /*for (int i = 0; i < words.Length; i++)
                 {
                     switch (words[i])
