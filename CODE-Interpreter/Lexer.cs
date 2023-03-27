@@ -35,14 +35,16 @@ namespace CODE_Interpreter
         {
             _tokens = new List<Token>();
             _lines = SplitByLine(code);
+            lineNum = 0;
             foreach (var line in _lines)
             {
+                lineNum++;
                 // Ignore comments
                 if (line.StartsWith("#"))
                 {
+                    _tokens.Add(new Token(TokenTypes.SHARP, "#", line, lineNum));
                     continue;
                 }
-                lineNum = 0;
             }
         }
 
@@ -214,7 +216,7 @@ namespace CODE_Interpreter
                 // use lineNumber for marking a line 
                 /*if (_lines[lineNumber] == "#")
                 {
-                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, _lines[lineNumber], null, lineNumber + 1));
                     continue;
                 }*/
 
@@ -229,7 +231,7 @@ namespace CODE_Interpreter
                         _lines[lineNumber].TrimEnd().IndexOf('#', _lines[lineNumber].IndexOf("BEGIN CODE") + "BEGIN CODE".Length) >= 0)
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
-                    _tokens.Add(new Token(TokenTypes.SHARP, "COMMENT", null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, "#", _lines[lineNumber], lineNumber + 1));
                     continue;
                 }
 
@@ -244,7 +246,7 @@ namespace CODE_Interpreter
                         _lines[lineNumber].TrimEnd().IndexOf('#', _lines[lineNumber].IndexOf("END CODE") + "END CODE".Length) >= 0)
                 {
                     _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
-                    _tokens.Add(new Token(TokenTypes.SHARP, "COMMENT", null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, "#", _lines[lineNumber], lineNumber + 1));
                     continue;
                 }
 

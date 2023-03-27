@@ -38,12 +38,20 @@ namespace CODE_Interpreter
 
             }
 
-            // does not begin with BEGIN CODE
-            if (_tokens.First().Type != TokenTypes.BEGIN_CODE)
+            
+            if (_tokens.First().Type != TokenTypes.BEGIN_CODE && _tokens.First().Literal.IndexOf("#") < 0 && _tokens.First().Literal.IndexOf("#") > _tokens.First().Literal.Length - 1)
             {
                 // basin inig print sa error mas nice if ma display ang line
                 _errorMessages.Add("TMP error->Code must start with \"BEGIN CODE\"");
             }
+
+            // Check if the first token's value contains a "#" symbol and text after the "#" symbol
+            /*if (_tokens.First().Literal.IndexOf("#") >= 0 && _tokens.First().Literal.IndexOf("#") < _tokens.First().Literal.Length - 1)
+            {
+                // Add error message with line number
+                int lineNumber = _tokens.First().Line;
+                _errorMessages.Add($"TMP error -> Code must start with \"BEGIN CODE\". Error found on line {lineNumber}");
+            }*/
 
             // does not end with END CODE
             if (_tokens.Last().Type != TokenTypes.END_CODE)
