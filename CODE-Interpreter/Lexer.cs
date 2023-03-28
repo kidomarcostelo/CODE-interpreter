@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using static System.Windows.Forms.LinkLabel;
 
 namespace CODE_Interpreter
 {
@@ -35,6 +36,16 @@ namespace CODE_Interpreter
             _tokens = new List<Token>();
             _lines = SplitByLine(code);
             lineNum = 0;
+            foreach (var line in _lines)
+            {
+                lineNum++;
+                // Ignore comments
+                if (line.StartsWith("#"))
+                {
+                    _tokens.Add(new Token(TokenTypes.SHARP, "#", line, lineNum));
+                    continue;
+                }
+            }
         }
 
         public int Analyze()
@@ -203,28 +214,44 @@ namespace CODE_Interpreter
             for (int lineNumber = 0; lineNumber < _lines.Length; lineNumber++)
             {
                 // use lineNumber for marking a line 
-                if (_lines[lineNumber] == "#")
+                /*if (_lines[lineNumber] == "#")
                 {
-                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, _lines[lineNumber], null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, _lines[lineNumber], null, lineNumber + 1));
                     continue;
-                }
-                
+                }*/
+
                 // if line ==  BEGIN CODE
-                if (_lines[lineNumber].TrimEnd() == "BEGIN CODE")
+                if (_lines[lineNumber].TrimEnd().StartsWith("BEGIN CODE"))
                 {
                     _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
                     continue;
                 }
-                
+
+                else if (_lines[lineNumber].TrimEnd().Contains("BEGIN CODE") &&
+                        _lines[lineNumber].TrimEnd().IndexOf('#', _lines[lineNumber].IndexOf("BEGIN CODE") + "BEGIN CODE".Length) >= 0)
+                {
+                    _tokens.Add(new Token(TokenTypes.BEGIN_CODE, "BEGIN CODE", null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, "#", _lines[lineNumber], lineNumber + 1));
+                    continue;
+                }
+
                 // if lines == END CODE
-                else if (_lines[lineNumber].TrimEnd() == "END CODE")
+                else if (_lines[lineNumber].TrimEnd().StartsWith("END CODE"))
                 {
                     _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
                     continue;
                 }
 
-                words = _lines[lineNumber].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                for (int i = 0; i < words.Length; i++)
+                else if (_lines[lineNumber].TrimEnd().Contains("END CODE") &&
+                        _lines[lineNumber].TrimEnd().IndexOf('#', _lines[lineNumber].IndexOf("END CODE") + "END CODE".Length) >= 0)
+                {
+                    _tokens.Add(new Token(TokenTypes.END_CODE, "END CODE", null, lineNumber + 1));
+                    _tokens.Add(new Token(TokenTypes.SHARP, "#", _lines[lineNumber], lineNumber + 1));
+                    continue;
+                }
+
+                    words = _lines[lineNumber].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                /*for (int i = 0; i < words.Length; i++)
                 {
                     switch (words[i])
                     {
@@ -244,7 +271,7 @@ namespace CODE_Interpreter
                         //    }
                         //    break;
                     }
-                }
+                }*/
                 // -- DATATYPES -- 
                 if (words.ElementAt(0) == "INT")
                 {
