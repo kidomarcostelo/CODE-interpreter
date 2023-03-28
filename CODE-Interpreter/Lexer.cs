@@ -287,11 +287,14 @@ namespace CODE_Interpreter
                         var next = i < words.Length - 1 ? words[i + 1] : null;
                         if (next != null)
                         {
-                            // tokenize datatype
-                            TokenizeDatatype(words[i], lineNumber + 1);
+                            if (!(TokenAlreadyExist(_tokens, words[i])))
+                            {
+                                // tokenize datatype
+                                TokenizeDatatype(words[i], lineNumber + 1);
+                            }
 
                             // tokenize variable
-                            if (IsValidVarName(next) && !(VarNameAlreadyExists(_tokens, next)))
+                            if (IsValidVarName(next) && !(TokenAlreadyExist(_tokens, next)))
                             {
                                 var varName = next;
                                 var datatype = words[i];
@@ -316,7 +319,7 @@ namespace CODE_Interpreter
                                             {
                                                 if (!IsDataType(words[j]))
                                                 {
-                                                    if (IsValidVarName(words[j]) && !(VarNameAlreadyExists(_tokens, words[j])))
+                                                    if (IsValidVarName(words[j]) && !(TokenAlreadyExist(_tokens, words[j])))
                                                     {
                                                         TokenizeVariablename(datatype, words[j], lineNumber + 1);
                                                         i++;
@@ -412,7 +415,7 @@ namespace CODE_Interpreter
         /// <param name="tokens">List of tokens to be checked.</param>
         /// <param name="temp">Variable name to be checked.</param>
         /// <returns>Returns true if a string is already tokenized as a variable.</returns>
-        private bool VarNameAlreadyExists(List<Token> tokens, String temp)
+        private bool TokenAlreadyExist(List<Token> tokens, String temp)
         {
             foreach (Token token in tokens)
             {
