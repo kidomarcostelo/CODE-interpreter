@@ -316,6 +316,62 @@ namespace CODE_Interpreter
             }
             return _tokens;
         }
+        /// <summary>
+        /// Converts datatype to token.
+        /// </summary>
+        /// <param name="word">String to be tokenize.</param>
+        /// <param name="lineNumber"> Line number on where the string is found.</param>
+        private void TokenizeDatatype(string word, int lineNumber)
+        {
+            if (word == "INT")
+                _tokens.Add(new Token(TokenTypes.INT, word, null, lineNumber));
+            else if (word == "CHAR")
+                _tokens.Add(new Token(TokenTypes.CHAR, word, null, lineNumber));
+            else if (word == "FLOAT")
+                _tokens.Add(new Token(TokenTypes.FLOAT, word, null, lineNumber));
+            else if (word == "BOOL")
+                _tokens.Add(new Token(TokenTypes.BOOL, word, null, lineNumber));
+        }
+
+        /// <summary>
+        /// Converts variable name to token.
+        /// </summary>
+        /// <param name="datatype"> String that represents as datatype of the variable name.</param>
+        /// <param name="word">String to be tokenize</param>
+        /// <param name="lineNumber">Line number on where the string is found.</param>
+        private void TokenizeVariablename(string datatype, string word, int lineNumber)
+        {
+            if (datatype == "INT")
+                _tokens.Add(new Token(TokenTypes.INT_VAR, word.TrimEnd(','), null, lineNumber));
+            else if (datatype == "CHAR")
+                _tokens.Add(new Token(TokenTypes.CHAR_VAR, word.TrimEnd(','), null, lineNumber));
+            else if (datatype == "FLOAT")
+                _tokens.Add(new Token(TokenTypes.FLOAT_VAR, word.TrimEnd(','), null, lineNumber));
+            else if (datatype == "BOOL")
+                _tokens.Add(new Token(TokenTypes.BOOL_VAR, word.TrimEnd(','), null, lineNumber));
+        }
+
+        /// <summary>
+        /// Checks if an input token is of type datatype.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <returns>Returns true if token is of type datatype.</returns>
+        private string IdentifyDatatype(string word)
+        {
+            switch (word)
+            {
+                case "INT":
+                    return "INT";
+                case "CHAR":
+                    return "CHAR";
+                case "FLOAT":
+                    return "FLOAT";
+                case "BOOL":
+                    return "BOOL";
+                default:
+                    return word;
+            }
+        }
 
         /// <summary>
         /// Checks if a given variable name iwas tokenized.
