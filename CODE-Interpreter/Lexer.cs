@@ -272,49 +272,141 @@ namespace CODE_Interpreter
                         //    break;
                     }
                 }*/
-                // -- DATATYPES -- 
-                if (words.ElementAt(0) == "INT")
-                {
-                    _tokens.Add(new Token(TokenTypes.INT, words.ElementAt(0), null, lineNumber + 1));
-                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
-                    {
-                        _tokens.Add(new Token(TokenTypes.INT_VAR, words.ElementAt(1), null, lineNumber + 1));
-                    }
-                    continue;
-                }
 
-                if (words.ElementAt(0) == "CHAR")
+                // Tokenize variable
+                for (int i = 0; i < words.Length; i++)
                 {
-                    _tokens.Add(new Token(TokenTypes.CHAR, words.ElementAt(0), null, lineNumber + 1));
-                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
-                    {
-                        _tokens.Add(new Token(TokenTypes.CHAR_VAR, words.ElementAt(1), null, lineNumber + 1));
-                    }
-                    continue;
-                }
+                    // If datatype -> variable name
+                    // If variable name then last character is comma -> datatype / variable name / wala
+                    // -if datatype, repeat 1st If
+                    // -if variable name, repeat 2nd If
+                    // -if wala, dili e tokenize. Invalid VarName
 
-                if (words.ElementAt(0) == "BOOL")
-                {
-                    _tokens.Add(new Token(TokenTypes.BOOL, words.ElementAt(0), null, lineNumber + 1));
-                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
+                    if (IsDataType(words[i]))
                     {
-                        _tokens.Add(new Token(TokenTypes.BOOL_VAR, words.ElementAt(1), null, lineNumber + 1));
-                    }
-                    continue;
-                }
+                        var next = i < words.Length - 1 ? words[i + 1] : null;
+                        if (next != null)
+                        {
+                            if (!(TokenAlreadyExist(_tokens, words[i])))
+                            {
+                                // tokenize datatype
+                                TokenizeDatatype(words[i], lineNumber + 1);
+                            }
 
-                if (words.ElementAt(0) == "FLOAT")
-                {
-                    _tokens.Add(new Token(TokenTypes.FLOAT, words.ElementAt(0), null, lineNumber + 1));
-                    if (IsValidVarName(words.ElementAt(1)) && !(VarNameAlreadyExists(_tokens, words.ElementAt(1))))
-                    {
-                        _tokens.Add(new Token(TokenTypes.FLOAT_VAR, words.ElementAt(1), null, lineNumber + 1));
+                            // tokenize variable
+                            if (IsValidVarName(next) && !(TokenAlreadyExist(_tokens, next)))
+                            {
+                                var varName = next;
+                                var datatype = words[i];
+                                TokenizeVariablename(datatype, varName, lineNumber + 1);
+                                i++;
+
+                                if (varName.Last() == ',')
+                                {
+                                    // update next to it's next to determine if next string is either a datatype / variable name / wala
+                                    next = i + 1 < words.Length - 1 ? words[i + 1] : null;
+                                    if (next != null)
+                                    {
+                                        // If next is datatype
+                                        if (IsDataType(next))
+                                        {
+                                            continue;
+                                        }
+                                        // If next is varname 
+                                        else
+                                        {
+                                            for (int j = i + 1; j < words.Length; j++)
+                                            {
+                                                if (!IsDataType(words[j]))
+                                                {
+                                                    if (IsValidVarName(words[j]) && !(TokenAlreadyExist(_tokens, words[j])))
+                                                    {
+                                                        TokenizeVariablename(datatype, words[j], lineNumber + 1);
+                                                        i++;
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
-                    continue;
                 }
-                // -- DATATYPES -- END
             }
             return _tokens;
+        }
+
+        /// <summary>
+        /// Converts datatype to token.
+        /// </summary>
+        /// <param name="word">String to be tokenize.</param>
+        /// <param name="lineNumber"> Line number on where the string is found.</param>
+        private void TokenizeDatatype(string word, int lineNumber)
+        {
+            if (word == "INT")
+                _tokens.Add(new Token(TokenTypes.INT, word, null, lineNumber));
+            else if (word == "CHAR")
+                _tokens.Add(new Token(TokenTypes.CHAR, word, null, lineNumber));
+            else if (word == "FLOAT")
+                _tokens.Add(new Token(TokenTypes.FLOAT, word, null, lineNumber));
+            else if (word == "BOOL")
+                _tokens.Add(new Token(TokenTypes.BOOL, word, null, lineNumber));
+        }
+
+        /// <summary>
+        /// Converts variable name to token.
+        /// </summary>
+        /// <param name="datatype"> String that represents as datatype of the variable name.</param>
+        /// <param name="word">String to be tokenize</param>
+        /// <param name="lineNumber">Line number on where the string is found.</param>
+        private void TokenizeVariablename(string datatype, string word, int lineNumber)
+        {
+            if (datatype == "INT")
+                _tokens.Add(new Token(TokenTypes.INT_VAR, word.TrimEnd(','), null, lineNumber));
+            else if (datatype == "CHAR")
+                _tokens.Add(new Token(TokenTypes.CHAR_VAR, word.TrimEnd(','), null, lineNumber));
+            else if (datatype == "FLOAT")
+                _tokens.Add(new Token(TokenTypes.FLOAT_VAR, word.TrimEnd(','), null, lineNumber));
+            else if (datatype == "BOOL")
+                _tokens.Add(new Token(TokenTypes.BOOL_VAR, word.TrimEnd(','), null, lineNumber));
+        }
+
+        /// <summary>
+        /// Checks if an input token is of type datatype.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <returns>Returns true if token is of type datatype.</returns>
+        private string IdentifyDatatype(string word)
+        {
+            switch (word)
+            {
+                case "INT":
+                    return "INT";
+                case "CHAR":
+                    return "CHAR";
+                case "FLOAT":
+                    return "FLOAT";
+                case "BOOL":
+                    return "BOOL";
+                default:
+                    return word;
+            }
+        }
+
+        /// <summary>
+        /// Checks if an input token is of type datatype.
+        /// </summary>
+        /// <param name="token">Token to be checked.</param>
+        /// <returns>Returns true if token is of type datatype.</returns>
+        private bool IsDataType(string word)
+        {
+            return word == "INT" || word == "BOOL" ||
+                word == "FLOAT" || word == "CHAR";
         }
 
         /// <summary>
@@ -323,7 +415,7 @@ namespace CODE_Interpreter
         /// <param name="tokens">List of tokens to be checked.</param>
         /// <param name="temp">Variable name to be checked.</param>
         /// <returns>Returns true if a string is already tokenized as a variable.</returns>
-        private bool VarNameAlreadyExists(List<Token> tokens, String temp)
+        private bool TokenAlreadyExist(List<Token> tokens, String temp)
         {
             foreach (Token token in tokens)
             {
